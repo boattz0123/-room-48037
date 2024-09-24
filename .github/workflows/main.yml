@@ -1,24 +1,21 @@
-name: Deploy to Firebase Hosting
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-      - run: npm install
-      - run: npm run build #  เปลี่ยนคำสั่งนี้ ถ้าคุณใช้เครื่องมือสร้างไฟล์ build อื่นๆ 
-      - uses: google-github-actions/auth@v0
-        with:
-          credentials_json: ${{ secrets.FIREBASE_CREDENTIALS }}
-      - run: firebase deploy
-        env:
-          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+{
+  "name": "your-project-name",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --mode production", // ตัวอย่างคำสั่ง build
+    "start": "webpack-dev-server --mode development" // ตัวอย่างคำสั่ง start development server
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    // "bootstrap": "^4.6.2", // ตัวอย่าง dependency
+    // "jquery": "^3.6.3" // ตัวอย่าง dependency
+  },
+  "devDependencies": {
+    "webpack": "^5.80.0", // ตัวอย่าง dependency
+    "webpack-cli": "^5.0.1", // ตัวอย่าง dependency
+    "webpack-dev-server": "^4.12.0" // ตัวอย่าง dependency
+  }
+}
