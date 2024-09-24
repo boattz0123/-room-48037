@@ -22,6 +22,7 @@ function createRoomBlock(roomName) {
         <p>Voltage: <span id="${roomName}-voltage" class="data-value" contenteditable="true">N/A</span> V</p>
         <p>Current: <span id="${roomName}-current" class="data-value" contenteditable="true">N/A</span> A</p>
         <p>Power: <span id="${roomName}-power" class="data-value" contenteditable="true">N/A</span> W</p>
+        <p id="${roomName}-status" class="status-value">OFF</p> 
     `;
     document.getElementById('rooms').appendChild(roomBlock);
     getRoomData(roomName); // ดึงข้อมูลของห้องนี้
@@ -35,7 +36,19 @@ function getRoomData(roomName) {
         document.getElementById(`${roomName}-voltage`).textContent = data.voltage + " V";
         document.getElementById(`${roomName}-current`).textContent = data.current + " A";
         document.getElementById(`${roomName}-power`).textContent = data.power + " W";
+        updateRoomStatus(roomName, data);
     });
+}
+
+function updateRoomStatus(roomName, data) {
+    var statusSpan = document.getElementById(roomName + "-status");
+    if (data && data.voltage > 0) { // ตรวจสอบว่ามีข้อมูลและ voltage มากกว่า 0
+        statusSpan.textContent = "ON";
+        statusSpan.style.color = "green"; 
+    } else {
+        statusSpan.textContent = "OFF";
+        statusSpan.style.color = "red";
+    }
 }
 
 function setupRoomDataUpdate(roomName) {
@@ -58,7 +71,7 @@ function setupRoomDataUpdate(roomName) {
 
 // ฟังก์ชันอัพเดตข้อมูลของห้อง
 function updateRoomData(roomName, voltage, current, power) {
-    database.ref('rooms/' + roomName).update({
+    database.ref('rooms/' + roomName).set({
         voltage: voltage,
         current: current,
         power: power
@@ -69,11 +82,25 @@ function updateRoomData(roomName, voltage, current, power) {
     });
 }
 
-// เพิ่มห้องใหม่ (สามารถแก้ไขให้เป็นการป้อนชื่อห้อง)
-document.getElementById('add-room-btn').addEventListener('click', function () {
-    var newRoomName = prompt("Enter new room name:");
+// ฟังก์ชันเพิ่มห้องใหม่
+document.getElementById('add-room-form').addEventListener('submit', function (event) {
+    event.preventDefault(); // ป้องกันการส่งฟอร์มแบบปกติ
+
+    var newRoomName = document.getElementById('new-room-name').value;
     if (newRoomName) {
-        createRoomBlock(newRoomName);
+        // เพิ่มข้อมูลห้องใหม่ใน Firebase
+        database.ref('rooms/' + newRoomName).set({
+            voltage: 0, // ค่าเริ่มต้นสำหรับ voltage
+            current: 0, // ค่าเริ่มต้นสำหรับ current
+            power: 0 // ค่าเริ่มต้นสำหรับ power
+        }).then(() => {
+            console.log('New room added: ' + newRoomName);
+            // สร้างบล็อกห้องใน frontend
+            createRoomBlock(newRoomName);
+            document.getElementById('add-room-form').reset(); // ล้างค่าในฟอร์ม
+        }).catch((error) => {
+            console.error('Error adding new room: ', error);
+        });
     }
 });
 
