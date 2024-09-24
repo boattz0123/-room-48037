@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Firebase Data Display</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 50px;
+        }
+
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            width: 300px;
+            margin-bottom: 10px;
+        }
+
+        .data-label {
+            font-weight: bold;
+        }
+
+        .data-value {
+            font-size: 1.2em;
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+
+        .room-block {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="rooms"></div>
+    <button id="add-room-btn">เพิ่มห้อง</button>
+
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
