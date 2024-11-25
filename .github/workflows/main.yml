@@ -14,10 +14,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - name: Initialize package.json
-        run: npm init -y 
-      - run: npm install 
-      - run: npm run build
+      - run: npm ci
+      - run: npm install webpack-cli
+      - run: npm run build 
       - uses: google-github-actions/auth@v0
         with:
           credentials_json: ${{ secrets.FIREBASE_CREDENTIALS }}
